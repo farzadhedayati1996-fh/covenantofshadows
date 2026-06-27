@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVENANT OF SHADOWS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #010101;
+      --white: #cdc8be;
+      --purple: #6b21a8;
+      --purple2: #9333ea;
+      --violet: #4c1d95;
+      --border: #0e0e18;
+    }
+    html, body {
+      width: 100%; min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+    }
+    canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; z-index: 1;
+    }
+    .bg-layer {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(107,33,168,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 50%, rgba(76,29,149,0.12) 0%, transparent 60%);
+      z-index: 1;
+    }
+    .face { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; z-index: 0; }
+    .face-l {
+      background:
+        linear-gradient(to right, rgba(1,1,1,0.05) 0%, rgba(1,1,1,0.82) 100%),
+        url('https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=900&q=80&fit=crop&crop=faces') center/cover no-repeat;
+      filter: grayscale(1) contrast(1.4) brightness(0.5);
+    }
+    .face-r {
+      background:
+        linear-gradient(to left, rgba(1,1,1,0.05) 0%, rgba(1,1,1,0.82) 100%),
+        url('https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?w=900&q=80&fit=crop&crop=faces') center/cover no-repeat;
+      filter: grayscale(1) contrast(2) brightness(0.3) invert(1);
+    }
+    .seam {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 2px; height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, var(--purple2) 15%, var(--purple) 50%, var(--purple2) 85%, transparent 100%);
+      box-shadow: 0 0 20px 4px rgba(147,51,234,0.6), 0 0 60px 10px rgba(107,33,168,0.35);
+      z-index: 3;
+    }
+    .vignette {
+      position: absolute; inset: 0; z-index: 2;
+      background: radial-gradient(ellipse at center, rgba(1,1,1,0.15) 0%, rgba(1,1,1,0.94) 100%);
+    }
+    .grain {
+      position: absolute; inset: 0; z-index: 4; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+    .hero-inner {
+      position: relative; z-index: 5;
+      text-align: center; padding: 2rem;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .eyebrow {
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.6em; text-transform: uppercase;
+      color: var(--purple2); margin-bottom: 2rem;
+      opacity: 0; animation: fadeup 1.2s ease forwards 0.3s;
+    }
+    .logo-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      opacity: 0; animation: fadeup 1.2s ease forwards 0.6s;
+    }
+    .logo-of { font-family: 'Cinzel', serif; font-size: clamp(0.7rem, 2vw, 1rem); letter-spacing: 0.8em; color: rgba(205,200,190,0.2); margin-bottom: 0.3rem; }
+    .logo {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 900; line-height: 1; letter-spacing: 0.12em;
+      color: var(--white);
+      text-shadow: 0 0 80px rgba(147,51,234,0.15), 3px 3px 0 rgba(107,33,168,0.4);
+    }
+    .logo-shadows { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 4vw, 2.8rem); font-weight: 400; letter-spacing: 0.5em; color: rgba(205,200,190,0.15); margin-top: 0.5rem; }
+    .divider {
+      width: 120px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--purple), transparent);
+      margin: 2rem auto;
+      opacity: 0; animation: fadeup 1.2s ease forwards 0.9s;
+    }
+    .tagline {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.75rem, 2vw, 1rem); font-weight: 400;
+      color: rgba(205,200,190,0.4); letter-spacing: 0.12em;
+      line-height: 1.9; max-width: 480px;
+      opacity: 0; animation: fadeup 1.2s ease forwards 1.1s;
+    }
+    .tagline strong { color: var(--white); font-weight: 700; }
+    .tagline .accent { color: var(--purple2); }
+    .hero-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: rgba(205,200,190,0.15); margin-top: 1rem;
+      opacity: 0; animation: fadeup 1.2s ease forwards 1.2s;
+    }
+    .cta-wrap {
+      margin-top: 3rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+      opacity: 0; animation: fadeup 1.2s ease forwards 1.4s;
+    }
+    .btn {
+      background: transparent; color: var(--purple2);
+      border: 1px solid var(--purple);
+      padding: 1.3rem 4rem;
+      font-family: 'Cinzel', serif; font-size: 1rem;
+      letter-spacing: 0.35em; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: all .4s; position: relative; overflow: hidden;
+    }
+    .btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--violet), var(--purple));
+      transform: translateY(100%); transition: transform .35s; z-index: -1;
+    }
+    .btn:hover { color: var(--white); border-color: var(--purple2); }
+    .btn:hover::before { transform: translateY(0); }
+    .btn-note { font-size: 0.58rem; color: #1a1a2a; letter-spacing: 0.22em; font-family: 'Cinzel', serif; }
+    @keyframes fadeup { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .bob {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5;
+      font-size: 0.55rem; letter-spacing: 0.3em; color: #1a1a2a;
+      font-family: 'Cinzel', serif;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      animation: bobbing 2.5s ease-in-out infinite;
+    }
+    .bob::after { content: ''; width: 1px; height: 36px; background: linear-gradient(to bottom, #1a1a2a, transparent); }
+    @keyframes bobbing { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+    section { position: relative; z-index: 1; }
+
+    /* ── NOT FOR ── */
+    .not-for { padding: 6rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .section-rune { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.55em; color: var(--purple); text-transform: uppercase; margin-bottom: 3.5rem; font-weight: 700; }
+    .not-grid { display: grid; gap: 0; }
+    .not-item { padding: 1.5rem 0; border-top: 1px solid #0a0a14; display: flex; gap: 1rem; align-items: flex-start; }
+    .not-x { color: #2a1a2a; font-family: 'Cinzel', serif; font-size: 1rem; }
+    .not-text { font-size: 0.85rem; color: #5a5a7a; line-height: 1.7; }
+    .not-text strong { color: #8a7a9a; }
+
+    /* ── PRICE TRUTH ── */
+    .price-truth { padding: 5rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .truth-box {
+      border-left: 2px solid var(--purple);
+      padding: 2rem 2rem 2rem 2.5rem;
+      background: #050508;
+    }
+    .truth-box p {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 400; line-height: 1.9;
+      color: rgba(205,200,190,0.35);
+      letter-spacing: 0.05em;
+    }
+    .truth-box p strong { color: var(--white); }
+    .truth-box p .accent { color: var(--purple2); }
+
+    /* ── WARNING ── */
+    .warning { padding: 4rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .warning-box {
+      border: 1px solid #2a1a3a; background: #060409; padding: 2.5rem; position: relative;
+    }
+    .warning-box::before {
+      content: '⚠ Read Before You Enter';
+      position: absolute; top: -0.55rem; left: 1.5rem;
+      background: var(--black); padding: 0 0.6rem;
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.3em; color: var(--purple2); font-weight: 700;
+    }
+    .warning-text { font-family: 'Cinzel', serif; font-size: 0.88rem; line-height: 2; color: #3a3a4a; }
+    .warning-text strong { color: var(--white); }
+    .warning-text .red { color: var(--purple2); }
+
+    /* ── MANIFESTO ── */
+    .manifesto { padding: 6rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .m-line { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; margin-bottom: 0.35rem; color: var(--white); }
+    .m-soft { font-size: clamp(0.9rem, 2vw, 1.3rem); font-weight: 300; color: #1e1e2e; margin-bottom: 2.8rem; }
+    .m-accent { color: var(--purple2); }
+
+    /* ── LAWS ── */
+    .laws { padding: 4rem 2rem 7rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .law { display: grid; grid-template-columns: 2.8rem 1fr; gap: 1.5rem; padding: 1.75rem 0; border-top: 1px solid #0a0a14; }
+    .law-n { font-family: 'Cinzel', serif; font-size: 1.6rem; color: #12122a; line-height: 1; }
+    .law-t { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--white); }
+    .law-d { font-size: 0.82rem; color: #2a2a3a; line-height: 1.75; }
+
+    /* ── PAYMENT ── */
+    .payment { padding: 5rem 2rem 7rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #0a0a14; border: 1px solid #0a0a14; margin-bottom: 2.5rem; }
+    .pay-card { background: #050508; padding: 2rem; text-align: center; }
+    .pay-card.featured { background: #080510; }
+    .pay-amount { font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 900; color: var(--white); line-height: 1; margin-bottom: 0.3rem; }
+    .pay-amount span { font-size: 1.2rem; color: var(--purple2); }
+    .pay-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: #2a2a3a; text-transform: uppercase; margin-bottom: 1rem; }
+    .pay-desc { font-size: 0.78rem; color: #1e1e2e; line-height: 1.7; }
+    .pay-featured-badge { font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.3em; color: var(--purple2); margin-bottom: 0.5rem; display: block; }
+    .ton-box { background: #050508; border: 1px solid #0e0e1e; padding: 2.5rem; position: relative; text-align: center; }
+    .ton-box::before { content: 'Payment Gateway'; position: absolute; top: -0.55rem; left: 50%; transform: translateX(-50%); background: var(--black); padding: 0 0.8rem; font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.3em; color: var(--purple); font-weight: 700; white-space: nowrap; }
+    .ton-logo { font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: 0.3em; color: var(--purple2); margin-bottom: 1.5rem; }
+    .ton-steps { text-align: left; margin-bottom: 2rem; }
+    .ton-step { display: flex; gap: 1rem; align-items: flex-start; padding: 0.75rem 0; border-bottom: 1px solid #0a0a14; font-size: 0.82rem; color: #2a2a3a; line-height: 1.6; }
+    .ton-step:last-child { border-bottom: none; }
+    .ton-step-n { font-family: 'Cinzel', serif; color: var(--purple); font-size: 0.9rem; min-width: 1.5rem; }
+    .ton-address-wrap { background: #030305; border: 1px solid #12122a; padding: 1.25rem; margin-bottom: 1.5rem; }
+    .ton-address-label { font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.3em; color: var(--purple); margin-bottom: 0.75rem; text-transform: uppercase; }
+    .ton-address { font-size: 0.78rem; color: var(--white); letter-spacing: 0.05em; word-break: break-all; line-height: 1.6; font-family: monospace; }
+    .copy-btn { margin-top: 1rem; background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 0.6rem 1.5rem; font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.2em; cursor: pointer; transition: all .25s; width: 100%; }
+    .copy-btn:hover { background: var(--purple); color: var(--white); }
+    .copy-btn.copied { color: #4ade80; border-color: #166534; background: #052e16; }
+    .ton-note { font-size: 0.72rem; color: #14142a; line-height: 1.8; letter-spacing: 0.03em; font-family: 'Cinzel', serif; }
+    .ton-note strong { color: #1e1e3a; }
+    .confirm-box { margin-top: 2rem; border: 1px solid #0e0e1e; background: #050508; padding: 2rem; }
+    .confirm-title { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.35em; color: var(--purple); margin-bottom: 1.25rem; text-transform: uppercase; }
+    .input-row { display: flex; max-width: 100%; margin-bottom: 1rem; }
+    .input-row input { flex: 1; background: #030305; border: 1px solid #0e0e1e; border-right: none; color: var(--white); padding: 0.9rem 1rem; font-size: 0.82rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; }
+    .input-row input::placeholder { color: #0e0e1e; }
+    .input-row input:focus { border-color: var(--purple); }
+    .input-row button { background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 0.9rem 1.2rem; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; transition: all .25s; }
+    .input-row button:hover { background: var(--purple); color: var(--white); }
+    .success-msg { display: none; padding: 1.5rem; border-left: 1px solid var(--purple); font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--white); line-height: 1.9; letter-spacing: 0.04em; }
+    .success-msg.show { display: block; }
+    .success-msg small { color: #1e1e2e; font-size: 0.72rem; display: block; margin-top: 0.5rem; }
+
+    /* ── PENALTY ── */
+    .penalty { padding: 4rem 2rem 6rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .penalty-box { background: #050305; border: 1px solid #1a0a1a; padding: 2rem; }
+    .penalty-amount { font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 900; color: var(--purple2); line-height: 1; margin-bottom: 0.5rem; }
+    .penalty-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: #2a1a2a; margin-bottom: 1.5rem; }
+    .penalty-text { font-size: 0.85rem; color: #2a1a2a; line-height: 1.9; }
+    .penalty-text strong { color: #4a2a4a; }
+
+    /* ── ARMY ── */
+    .army-section { padding: 4rem 2rem 8rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
+    .army { display: flex; align-items: baseline; gap: 1.2rem; }
+    .army-num { font-family: 'Cinzel', serif; font-size: clamp(4rem, 12vw, 7rem); color: var(--white); line-height: 1; font-weight: 900; }
+    .army-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: #14142a; line-height: 2.2; }
+
+    footer { border-top: 1px solid #0a0a14; padding: 2.5rem 2rem; max-width: 720px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    footer span { font-family: 'Cinzel', serif; font-size: 0.58rem; color: #0e0e1e; letter-spacing: 0.22em; text-transform: uppercase; }
+
+    @media(max-width:600px){
+      .pay-grid{grid-template-columns:1fr}
+      .input-row{flex-direction:column}
+      .input-row input{border-right:1px solid #0e0e1e;border-bottom:none}
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="face"><div class="face-l"></div><div class="face-r"></div></div>
+  <div class="seam"></div>
+  <div class="bg-layer"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">A Brotherhood of Silence</p>
+    <div class="logo-wrap">
+      <p class="logo-of">— The —</p>
+      <h1 class="logo">COVENANT</h1>
+      <p class="logo-shadows">OF SHADOWS</p>
+    </div>
+    <div class="divider"></div>
+    <p class="tagline">
+      You didn't choose the shadow.<br>
+      <strong><span class="accent">The shadow chose you.</span></strong>
+    </p>
+    <p class="hero-sub">The few. The silent. The chosen.</p>
+    <div class="cta-wrap">
+      <a href="#enter" class="btn">I Have Been Chosen</a>
+      <p class="btn-note">$50 entry · No free passes · No exceptions</p>
+    </div>
+  </div>
+  <div class="bob">descend</div>
+</section>
+
+<!-- NOT FOR -->
+<section class="not-for">
+  <p class="section-rune">∴ This Is Not For You If</p>
+  <div class="not-grid">
+    <div class="not-item">
+      <span class="not-x">✗</span>
+      <p class="not-text">You are looking for <strong>motivation.</strong> We don't motivate. We demand.</p>
+    </div>
+    <div class="not-item">
+      <span class="not-x">✗</span>
+      <p class="not-text">You need a <strong>community to stay accountable.</strong> A shadow answers to no one but itself.</p>
+    </div>
+    <div class="not-item">
+      <span class="not-x">✗</span>
+      <p class="not-text">You have <strong>never kept a promise to yourself.</strong> Start there first.</p>
+    </div>
+    <div class="not-item">
+      <span class="not-x">✗</span>
+      <p class="not-text">You think you <strong>might break even one law.</strong> Then do not enter. Come back when you are certain.</p>
+    </div>
+    <div class="not-item">
+      <span class="not-x">✗</span>
+      <p class="not-text">You are here to <strong>try.</strong> The Covenant has no room for trying. Only doing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE TRUTH -->
+<section class="price-truth">
+  <div class="truth-box">
+    <p>
+      Life itself has taught you this —<br>
+      <strong>everything has a price.</strong><br>
+      Nothing of value is ever free.<br><br>
+      Even God whispers it in every breath you take —<br>
+      <span class="accent">existence costs something.</span><br><br>
+      The question is not whether you will pay.<br>
+      <strong>The question is what you are willing to pay for.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- WARNING -->
+<section class="warning">
+  <p class="section-rune">∴ Before You Enter</p>
+  <div class="warning-box">
+    <p class="warning-text">
+      This is <strong>not a challenge.</strong> This is not a 30-day program you try and abandon.<br><br>
+      The Covenant of Shadows is a <strong>brotherhood for life.</strong> You will commit to 90 days of iron discipline. No exceptions. No excuses.<br><br>
+      <span class="red">If you think you might break even one law — do not enter.</span> Leave now. Come back when you are ready.<br><br>
+      If you break a law and declare it, you pay the <strong>$100 penalty.</strong> This is honor.<br>
+      If you break a law and stay silent — <strong>you will never reach your true power.</strong> The shadow knows.<br><br>
+      Only those who are truly ready belong here.
+    </p>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <p class="section-rune">∴ The Truth</p>
+  <p class="m-line">Most men live loud.</p>
+  <p class="m-soft">They speak to be heard. They move to be seen.</p>
+  <p class="m-line">A shadow makes no sound.</p>
+  <p class="m-soft">It simply <span class="m-accent">appears.</span> Precise. Inevitable. Unstoppable.</p>
+  <p class="m-line">This is not a community.</p>
+  <p class="m-soft">This is a <span class="m-accent">brotherhood of the chosen.</span></p>
+</section>
+
+<!-- LAWS -->
+<section class="laws">
+  <p class="section-rune">∴ The Eight Sacred Laws</p>
+  <div class="law"><span class="law-n">I</span><div><p class="law-t">Guard Your Sacred Energy</p><p class="law-d">No pornography. No self-destruction. Your energy is the source of everything you will ever build.</p></div></div>
+  <div class="law"><span class="law-n">II</span><div><p class="law-t">No Poison Shall Enter</p><p class="law-d">No alcohol. No substance that dulls the mind. Your clarity is your only weapon.</p></div></div>
+  <div class="law"><span class="law-n">III</span><div><p class="law-t">The Body Is the Temple</p><p class="law-d">Move every single day. A weak body is a weak mind. No exceptions in the Covenant.</p></div></div>
+  <div class="law"><span class="law-n">IV</span><div><p class="law-t">Enter the Silence Daily</p><p class="law-d">Meditate. Go inward. Power is not found in noise. It is forged in stillness.</p></div></div>
+  <div class="law"><span class="law-n">V</span><div><p class="law-t">Words Are Sacred Currency</p><p class="law-d">Speak less. Mean everything you say. Stop spending your power on nothing.</p></div></div>
+  <div class="law"><span class="law-n">VI</span><div><p class="law-t">Honor Every Covenant</p><p class="law-d">In love. In brotherhood. In life. Your word is your identity. Break it once and you break everything.</p></div></div>
+  <div class="law"><span class="law-n">VII</span><div><p class="law-t">Fear Is the Enemy</p><p class="law-d">Feel it. Then move anyway. That is the only path forward.</p></div></div>
+  <div class="law"><span class="law-n">VIII</span><div><p class="law-t">Feed the Temple with Precision</p><p class="law-d">What enters your body enters your mind. Choose every meal as if your future depends on it. It does.</p></div></div>
+</section>
+
+<!-- PAYMENT -->
+<section class="payment" id="enter">
+  <p class="section-rune">∴ Enter the Covenant</p>
+  <div class="pay-grid">
+    <div class="pay-card">
+      <div class="pay-amount"><span>$</span>50</div>
+      <div class="pay-label">One-Time Entry</div>
+      <div class="pay-desc">Your covenant seal. Paid once. Brotherhood for life.</div>
+    </div>
+    <div class="pay-card featured">
+      <span class="pay-featured-badge">∴ Penalty of Honor</span>
+      <div class="pay-amount" style="font-size:1.8rem;padding-top:0.5rem">Breaking the<br>Covenant</div>
+      <div class="pay-label" style="margin-top:0.75rem">Carries a Price</div>
+      <div class="pay-desc">You will learn it when you enter. This is how the Covenant stays pure.</div>
+    </div>
+  </div>
+  <div class="ton-box">
+    <p class="ton-logo">◈ TON Network ◈</p>
+    <div class="ton-steps">
+      <div class="ton-step"><span class="ton-step-n">1.</span><span>Open <strong style="color:#3a3a4a">@wallet</strong> in Telegram or download Tonkeeper</span></div>
+      <div class="ton-step"><span class="ton-step-n">2.</span><span>Send exactly <strong style="color:#3a3a4a">$50 worth of TON</strong> to the address below</span></div>
+      <div class="ton-step"><span class="ton-step-n">3.</span><span>Copy your <strong style="color:#3a3a4a">transaction hash</strong> after sending</span></div>
+      <div class="ton-step"><span class="ton-step-n">4.</span><span>Enter your email + transaction hash below to seal your entry</span></div>
+    </div>
+    <div class="ton-address-wrap">
+      <p class="ton-address-label">∴ Covenant Wallet</p>
+      <p class="ton-address" id="ton-addr">UQChfOygZlWIPmgLiFRlQuA7G-rKRCJdUyq5gjf8XhZC0kgH</p>
+      <button class="copy-btn" id="copy-btn" onclick="copyAddress()">Copy Address</button>
+    </div>
+    <p class="ton-note">
+      <strong>Network:</strong> TON (The Open Network) · <strong>Amount:</strong> $50 USD in TON<br>
+      Do not send from an exchange. Use a personal wallet only.
+    </p>
+  </div>
+  <div class="confirm-box">
+    <p class="confirm-title">∴ Seal Your Covenant</p>
+    <div class="input-row">
+      <input type="email" id="email-in" placeholder="your@email.com" />
+    </div>
+    <div class="input-row">
+      <input type="text" id="txhash-in" placeholder="Transaction hash..." />
+      <button onclick="sealCovenant()">Seal</button>
+    </div>
+    <div class="success-msg" id="ok">
+      The Covenant is sealed.<br>
+      First transmission arrives tomorrow at 05:00 AM.
+      <small>Welcome, brother. There is no way back.</small>
+    </div>
+  </div>
+</section>
+
+<!-- PENALTY -->
+<section class="penalty">
+  <p class="section-rune">∴ The Penalty of Honor</p>
+  <div class="penalty-box">
+    <div class="penalty-amount" style="font-size:2rem;line-height:1.3">The Price<br>of Honor</div>
+    <div class="penalty-label" style="margin-top:0.75rem">Revealed Upon Entry</div>
+    <p class="penalty-text">
+      Every shadow knows when a law has been broken. You may choose silence.<br><br>
+      But silence has a price — <strong>you will never reach the depth of your power.</strong><br><br>
+      Declare your breach. Pay the penalty. Rise again.<br><br>
+      <strong>The penalty is not punishment. It is the price of your honor.</strong><br><br>
+      <em style="color:#3a2a4a">"The shadow that lies to itself dies in the dark."</em>
+    </p>
+  </div>
+</section>
+
+<!-- ARMY -->
+<section class="army-section">
+  <p class="section-rune">∴ The Brotherhood</p>
+  <div class="army">
+    <span class="army-num" id="cnt">0</span>
+    <span class="army-label">Brothers<br>of the<br>Covenant</span>
+  </div>
+</section>
+
+<footer>
+  <span>Covenant of Shadows</span>
+  <span>The few. The silent. The chosen.</span>
+</footer>
+
+<script>
+  // particles
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  let W, H, pts = [];
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function init() {
+    pts = Array.from({length:55}, ()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*1.2+0.2,
+      dx:(Math.random()-.5)*.25, dy:(Math.random()-.5)*.25,
+      o:Math.random()*.4+.05
+    }));
+  }
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.x<0||p.x>W) p.dx*=-1;
+      if(p.y<0||p.y>H) p.dy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(147,51,234,${p.o})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize(); init(); draw();
+  window.addEventListener('resize',()=>{ resize(); init(); });
+
+  // counter
+  const target=47, el=document.getElementById('cnt');
+  let n=0;
+  const t=setInterval(()=>{ n=Math.min(n+1,target); el.textContent=n; if(n>=target) clearInterval(t); },40);
+
+  // copy
+  function copyAddress() {
+    navigator.clipboard.writeText(document.getElementById('ton-addr').textContent).then(()=>{
+      const btn=document.getElementById('copy-btn');
+      btn.textContent='✓ Copied'; btn.classList.add('copied');
+      setTimeout(()=>{ btn.textContent='Copy Address'; btn.classList.remove('copied'); },2500);
+    });
+  }
+
+  // seal
+  function sealCovenant() {
+    const email=document.getElementById('email-in').value.trim();
+    const tx=document.getElementById('txhash-in').value.trim();
+    if(!email||!email.includes('@')){ document.getElementById('email-in').style.borderColor='#6b21a8'; return; }
+    if(!tx||tx.length<8){ document.getElementById('txhash-in').style.borderColor='#6b21a8'; return; }
+    document.querySelectorAll('.confirm-box .input-row').forEach(r=>r.style.display='none');
+    document.getElementById('ok').classList.add('show');
+    el.textContent=parseInt(el.textContent)+1;
+  }
+</script>
+</body>
+</html>
