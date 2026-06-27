@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COVENANT OF SHADOWS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --black: #010101;
-      --white: #cdc8be;
+      --white: #ddd8d0;
       --purple: #6b21a8;
       --purple2: #9333ea;
       --violet: #4c1d95;
@@ -20,7 +20,7 @@
       overflow-x: hidden;
       background: var(--black);
       color: var(--white);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Cormorant Garamond', serif;
     }
     canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
@@ -30,29 +30,22 @@
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; z-index: 1;
     }
-    .bg-layer {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 50%, rgba(107,33,168,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse at 70% 50%, rgba(76,29,149,0.12) 0%, transparent 60%);
-      z-index: 1;
-    }
     .face { position: absolute; inset: 0; z-index: 0; }
     .face-bg {
       position: absolute; inset: 0;
       background: url('bg.jpg') center/cover no-repeat;
-      filter: brightness(0.3) contrast(1.2);
+      filter: brightness(0.28) contrast(1.2);
     }
-    .seam {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 2px; height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, var(--purple2) 15%, var(--purple) 50%, var(--purple2) 85%, transparent 100%);
-      box-shadow: 0 0 20px 4px rgba(147,51,234,0.6), 0 0 60px 10px rgba(107,33,168,0.35);
-      z-index: 3;
+    .bg-layer {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(107,33,168,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 50%, rgba(76,29,149,0.1) 0%, transparent 60%);
+      z-index: 1;
     }
     .vignette {
       position: absolute; inset: 0; z-index: 2;
-      background: radial-gradient(ellipse at center, rgba(1,1,1,0.15) 0%, rgba(1,1,1,0.94) 100%);
+      background: radial-gradient(ellipse at center, rgba(1,1,1,0.1) 0%, rgba(1,1,1,0.92) 100%);
     }
     .grain {
       position: absolute; inset: 0; z-index: 4; pointer-events: none;
@@ -65,7 +58,7 @@
       display: flex; flex-direction: column; align-items: center;
     }
     .eyebrow {
-      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      font-family: 'Cinzel', serif; font-size: 0.75rem;
       letter-spacing: 0.6em; text-transform: uppercase;
       color: var(--purple2); margin-bottom: 2rem;
       opacity: 0; animation: fadeup 1.2s ease forwards 0.3s;
@@ -74,15 +67,23 @@
       display: flex; flex-direction: column; align-items: center;
       opacity: 0; animation: fadeup 1.2s ease forwards 0.6s;
     }
-    .logo-of { font-family: 'Cinzel', serif; font-size: clamp(0.7rem, 2vw, 1rem); letter-spacing: 0.8em; color: rgba(205,200,190,0.2); margin-bottom: 0.3rem; }
+    .logo-of {
+      font-family: 'Cinzel', serif; font-size: clamp(0.8rem, 2vw, 1.1rem);
+      letter-spacing: 0.8em; color: rgba(221,216,208,0.2); margin-bottom: 0.3rem;
+    }
     .logo {
       font-family: 'Cinzel', serif;
-      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-size: clamp(3rem, 10vw, 8rem);
       font-weight: 900; line-height: 1; letter-spacing: 0.12em;
       color: var(--white);
       text-shadow: 0 0 80px rgba(147,51,234,0.15), 3px 3px 0 rgba(107,33,168,0.4);
     }
-    .logo-shadows { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 4vw, 2.8rem); font-weight: 400; letter-spacing: 0.5em; color: rgba(205,200,190,0.15); margin-top: 0.5rem; }
+    .logo-shadows {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.3rem, 4vw, 3rem);
+      font-weight: 400; letter-spacing: 0.5em;
+      color: rgba(221,216,208,0.15); margin-top: 0.5rem;
+    }
     .divider {
       width: 120px; height: 1px;
       background: linear-gradient(to right, transparent, var(--purple), transparent);
@@ -90,9 +91,9 @@
       opacity: 0; animation: fadeup 1.2s ease forwards 0.9s;
     }
     .tagline {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(0.75rem, 2vw, 1rem); font-weight: 400;
-      color: rgba(205,200,190,0.4); letter-spacing: 0.12em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 400;
+      color: rgba(221,216,208,0.45); letter-spacing: 0.08em;
       line-height: 1.9; max-width: 480px;
       opacity: 0; animation: fadeup 1.2s ease forwards 1.1s;
     }
@@ -100,8 +101,8 @@
     .tagline .accent { color: var(--purple2); }
     .hero-sub {
       font-family: 'Cinzel', serif;
-      font-size: 0.65rem; letter-spacing: 0.35em;
-      color: rgba(205,200,190,0.15); margin-top: 1rem;
+      font-size: 0.8rem; letter-spacing: 0.35em;
+      color: rgba(221,216,208,0.15); margin-top: 1rem;
       opacity: 0; animation: fadeup 1.2s ease forwards 1.2s;
     }
     .cta-wrap {
@@ -125,11 +126,14 @@
     }
     .btn:hover { color: var(--white); border-color: var(--purple2); }
     .btn:hover::before { transform: translateY(0); }
-    .btn-note { font-size: 0.58rem; color: #1a1a2a; letter-spacing: 0.22em; font-family: 'Cinzel', serif; }
+    .btn-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; color: #1a1a2a; letter-spacing: 0.15em;
+    }
     @keyframes fadeup { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .bob {
       position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5;
-      font-size: 0.55rem; letter-spacing: 0.3em; color: #1a1a2a;
+      font-size: 0.65rem; letter-spacing: 0.3em; color: #1a1a2a;
       font-family: 'Cinzel', serif;
       display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
       animation: bobbing 2.5s ease-in-out infinite;
@@ -141,112 +145,103 @@
 
     /* ── NOT FOR ── */
     .not-for { padding: 6rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .section-rune { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.55em; color: var(--purple); text-transform: uppercase; margin-bottom: 3.5rem; font-weight: 700; }
-    .not-grid { display: grid; gap: 0; }
+    .section-rune {
+      font-family: 'Cinzel', serif; font-size: 0.75rem;
+      letter-spacing: 0.55em; color: var(--purple); text-transform: uppercase;
+      margin-bottom: 3.5rem; font-weight: 700;
+    }
     .not-item { padding: 1.5rem 0; border-top: 1px solid #0a0a14; display: flex; gap: 1rem; align-items: flex-start; }
-    .not-x { color: #2a1a2a; font-family: 'Cinzel', serif; font-size: 1rem; }
-    .not-text { font-size: 1rem; color: #5a5a7a; line-height: 1.7; }
+    .not-x { color: #2a1a2a; font-family: 'Cinzel', serif; font-size: 1.2rem; }
+    .not-text { font-size: 1.15rem; color: #5a5a7a; line-height: 1.7; font-family: 'Cormorant Garamond', serif; }
     .not-text strong { color: #8a7a9a; }
 
     /* ── PRICE TRUTH ── */
     .price-truth { padding: 5rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .truth-box {
-      border-left: 2px solid var(--purple);
-      padding: 2rem 2rem 2rem 2.5rem;
-      background: #050508;
-    }
+    .truth-box { border-left: 2px solid var(--purple); padding: 2rem 2rem 2rem 2.5rem; background: #050508; }
     .truth-box p {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      font-weight: 400; line-height: 1.9;
-      color: rgba(205,200,190,0.35);
-      letter-spacing: 0.05em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      font-weight: 400; line-height: 2;
+      color: rgba(221,216,208,0.35); letter-spacing: 0.03em;
     }
     .truth-box p strong { color: var(--white); }
     .truth-box p .accent { color: var(--purple2); }
 
     /* ── WARNING ── */
     .warning { padding: 4rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .warning-box {
-      border: 1px solid #2a1a3a; background: #060409; padding: 2.5rem; position: relative;
-    }
+    .warning-box { border: 1px solid #2a1a3a; background: #060409; padding: 2.5rem; position: relative; }
     .warning-box::before {
       content: '⚠ Read Before You Enter';
       position: absolute; top: -0.55rem; left: 1.5rem;
       background: var(--black); padding: 0 0.6rem;
-      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
       letter-spacing: 0.3em; color: var(--purple2); font-weight: 700;
     }
-    .warning-text { font-family: 'Cinzel', serif; font-size: 1rem; line-height: 2; color: #3a3a4a; }
+    .warning-text { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; line-height: 2; color: #5a5a6a; }
     .warning-text strong { color: var(--white); }
     .warning-text .red { color: var(--purple2); }
 
     /* ── MANIFESTO ── */
     .manifesto { padding: 6rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .m-line { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; margin-bottom: 0.35rem; color: var(--white); }
-    .m-soft { font-size: clamp(0.9rem, 2vw, 1.3rem); font-weight: 300; color: #1e1e2e; margin-bottom: 2.8rem; }
+    .m-line { font-family: 'Cinzel', serif; font-size: clamp(1.6rem, 4.5vw, 2.8rem); font-weight: 700; line-height: 1.25; margin-bottom: 0.35rem; color: var(--white); }
+    .m-soft { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 300; color: #1e1e2e; margin-bottom: 2.8rem; }
     .m-accent { color: var(--purple2); }
 
     /* ── LAWS ── */
     .laws { padding: 4rem 2rem 7rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .law { display: grid; grid-template-columns: 2.8rem 1fr; gap: 1.5rem; padding: 1.75rem 0; border-top: 1px solid #0a0a14; }
-    .law-n { font-family: 'Cinzel', serif; font-size: 1.6rem; color: #12122a; line-height: 1; }
-    .law-t { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--white); }
-    .law-d { font-size: 0.95rem; color: #2a2a3a; line-height: 1.75; }
+    .law { display: grid; grid-template-columns: 3rem 1fr; gap: 1.5rem; padding: 2rem 0; border-top: 1px solid #0a0a14; }
+    .law-n { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #12122a; line-height: 1; }
+    .law-t { font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--white); }
+    .law-d { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #4a4a5a; line-height: 1.75; }
 
     /* ── PAYMENT ── */
     .payment { padding: 5rem 2rem 7rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #0a0a14; border: 1px solid #0a0a14; margin-bottom: 2.5rem; }
     .pay-card { background: #050508; padding: 2rem; text-align: center; }
     .pay-card.featured { background: #080510; }
-    .pay-amount { font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 900; color: var(--white); line-height: 1; margin-bottom: 0.3rem; }
-    .pay-amount span { font-size: 1.2rem; color: var(--purple2); }
-    .pay-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: #2a2a3a; text-transform: uppercase; margin-bottom: 1rem; }
-    .pay-desc { font-size: 0.78rem; color: #1e1e2e; line-height: 1.7; }
-    .pay-featured-badge { font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.3em; color: var(--purple2); margin-bottom: 0.5rem; display: block; }
+    .pay-amount { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--white); line-height: 1; margin-bottom: 0.3rem; }
+    .pay-amount span { font-size: 1.5rem; color: var(--purple2); }
+    .pay-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; color: #2a2a3a; text-transform: uppercase; margin-bottom: 1rem; }
+    .pay-desc { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #2a2a3a; line-height: 1.7; }
+    .pay-featured-badge { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: var(--purple2); margin-bottom: 0.5rem; display: block; }
     .ton-box { background: #050508; border: 1px solid #0e0e1e; padding: 2.5rem; position: relative; text-align: center; }
-    .ton-box::before { content: 'Payment Gateway'; position: absolute; top: -0.55rem; left: 50%; transform: translateX(-50%); background: var(--black); padding: 0 0.8rem; font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.3em; color: var(--purple); font-weight: 700; white-space: nowrap; }
-    .ton-logo { font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: 0.3em; color: var(--purple2); margin-bottom: 1.5rem; }
+    .ton-box::before { content: 'Payment Gateway'; position: absolute; top: -0.55rem; left: 50%; transform: translateX(-50%); background: var(--black); padding: 0 0.8rem; font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.3em; color: var(--purple); font-weight: 700; white-space: nowrap; }
+    .ton-logo { font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 0.3em; color: var(--purple2); margin-bottom: 1.5rem; }
     .ton-steps { text-align: left; margin-bottom: 2rem; }
-    .ton-step { display: flex; gap: 1rem; align-items: flex-start; padding: 0.75rem 0; border-bottom: 1px solid #0a0a14; font-size: 0.82rem; color: #2a2a3a; line-height: 1.6; }
+    .ton-step { display: flex; gap: 1rem; align-items: flex-start; padding: 0.85rem 0; border-bottom: 1px solid #0a0a14; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: #4a4a5a; line-height: 1.6; }
     .ton-step:last-child { border-bottom: none; }
-    .ton-step-n { font-family: 'Cinzel', serif; color: var(--purple); font-size: 0.9rem; min-width: 1.5rem; }
+    .ton-step-n { font-family: 'Cinzel', serif; color: var(--purple); font-size: 1rem; min-width: 1.5rem; }
     .ton-address-wrap { background: #030305; border: 1px solid #12122a; padding: 1.25rem; margin-bottom: 1.5rem; }
-    .ton-address-label { font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.3em; color: var(--purple); margin-bottom: 0.75rem; text-transform: uppercase; }
-    .ton-address { font-size: 0.78rem; color: var(--white); letter-spacing: 0.05em; word-break: break-all; line-height: 1.6; font-family: monospace; }
-    .copy-btn { margin-top: 1rem; background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 0.6rem 1.5rem; font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.2em; cursor: pointer; transition: all .25s; width: 100%; }
+    .ton-address-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.3em; color: var(--purple); margin-bottom: 0.75rem; text-transform: uppercase; }
+    .ton-address { font-size: 0.9rem; color: var(--white); letter-spacing: 0.05em; word-break: break-all; line-height: 1.6; font-family: monospace; }
+    .copy-btn { margin-top: 1rem; background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 0.75rem 1.5rem; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.2em; cursor: pointer; transition: all .25s; width: 100%; }
     .copy-btn:hover { background: var(--purple); color: var(--white); }
     .copy-btn.copied { color: #4ade80; border-color: #166534; background: #052e16; }
-    .ton-note { font-size: 0.72rem; color: #14142a; line-height: 1.8; letter-spacing: 0.03em; font-family: 'Cinzel', serif; }
-    .ton-note strong { color: #1e1e3a; }
+    .ton-note { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #1e1e2e; line-height: 1.8; }
+    .ton-note strong { color: #2a2a3a; }
     .confirm-box { margin-top: 2rem; border: 1px solid #0e0e1e; background: #050508; padding: 2rem; }
-    .confirm-title { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.35em; color: var(--purple); margin-bottom: 1.25rem; text-transform: uppercase; }
+    .confirm-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.35em; color: var(--purple); margin-bottom: 1.25rem; text-transform: uppercase; }
     .input-row { display: flex; max-width: 100%; margin-bottom: 1rem; }
-    .input-row input { flex: 1; background: #030305; border: 1px solid #0e0e1e; border-right: none; color: var(--white); padding: 0.9rem 1rem; font-size: 0.82rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; }
+    .input-row input { flex: 1; background: #030305; border: 1px solid #0e0e1e; border-right: none; color: var(--white); padding: 1rem 1rem; font-size: 1rem; font-family: 'Cormorant Garamond', serif; outline: none; transition: border-color .2s; }
     .input-row input::placeholder { color: #0e0e1e; }
     .input-row input:focus { border-color: var(--purple); }
-    .input-row button { background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 0.9rem 1.2rem; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; transition: all .25s; }
+    .input-row button { background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 1rem 1.2rem; font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; transition: all .25s; }
     .input-row button:hover { background: var(--purple); color: var(--white); }
-    .success-msg { display: none; padding: 1.5rem; border-left: 1px solid var(--purple); font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--white); line-height: 1.9; letter-spacing: 0.04em; }
+    .success-msg { display: none; padding: 1.5rem; border-left: 1px solid var(--purple); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--white); line-height: 1.9; }
     .success-msg.show { display: block; }
-    .success-msg small { color: #1e1e2e; font-size: 0.72rem; display: block; margin-top: 0.5rem; }
+    .success-msg small { color: #1e1e2e; font-size: 0.9rem; display: block; margin-top: 0.5rem; }
 
     /* ── PENALTY ── */
     .penalty { padding: 4rem 2rem 6rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .penalty-box { background: #050305; border: 1px solid #1a0a1a; padding: 2rem; }
-    .penalty-amount { font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 900; color: var(--purple2); line-height: 1; margin-bottom: 0.5rem; }
-    .penalty-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: #2a1a2a; margin-bottom: 1.5rem; }
-    .penalty-text { font-size: 0.85rem; color: #2a1a2a; line-height: 1.9; }
-    .penalty-text strong { color: #4a2a4a; }
+    .penalty-title { font-family: 'Cinzel', serif; font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 900; color: var(--purple2); line-height: 1.2; margin-bottom: 0.5rem; }
+    .penalty-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; color: #2a1a2a; margin-bottom: 1.5rem; }
+    .penalty-text { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #3a2a3a; line-height: 1.9; }
+    .penalty-text strong { color: #5a3a5a; }
 
-    /* ── ARMY ── */
-    .army-section { padding: 4rem 2rem 8rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .army { display: flex; align-items: baseline; gap: 1.2rem; }
-    .army-num { font-family: 'Cinzel', serif; font-size: clamp(4rem, 12vw, 7rem); color: var(--white); line-height: 1; font-weight: 900; }
-    .army-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: #14142a; line-height: 2.2; }
-
+    /* ── FOOTER ── */
     footer { border-top: 1px solid #0a0a14; padding: 2.5rem 2rem; max-width: 720px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    footer span { font-family: 'Cinzel', serif; font-size: 0.58rem; color: #0e0e1e; letter-spacing: 0.22em; text-transform: uppercase; }
+    footer span { font-family: 'Cinzel', serif; font-size: 0.7rem; color: #0e0e1e; letter-spacing: 0.22em; text-transform: uppercase; }
 
     @media(max-width:600px){
       .pay-grid{grid-template-columns:1fr}
@@ -289,28 +284,11 @@
 <!-- NOT FOR -->
 <section class="not-for">
   <p class="section-rune">∴ This Is Not For You If</p>
-  <div class="not-grid">
-    <div class="not-item">
-      <span class="not-x">✗</span>
-      <p class="not-text">You are looking for <strong>motivation.</strong> We don't motivate. We demand.</p>
-    </div>
-    <div class="not-item">
-      <span class="not-x">✗</span>
-      <p class="not-text">You need a <strong>community to stay accountable.</strong> A shadow answers to no one but itself.</p>
-    </div>
-    <div class="not-item">
-      <span class="not-x">✗</span>
-      <p class="not-text">You have <strong>never kept a promise to yourself.</strong> Start there first.</p>
-    </div>
-    <div class="not-item">
-      <span class="not-x">✗</span>
-      <p class="not-text">You think you <strong>might break even one law.</strong> Then do not enter. Come back when you are certain.</p>
-    </div>
-    <div class="not-item">
-      <span class="not-x">✗</span>
-      <p class="not-text">You are here to <strong>try.</strong> The Covenant has no room for trying. Only doing.</p>
-    </div>
-  </div>
+  <div class="not-item"><span class="not-x">✗</span><p class="not-text">You are looking for <strong>motivation.</strong> We don't motivate. We demand.</p></div>
+  <div class="not-item"><span class="not-x">✗</span><p class="not-text">You need a <strong>community to stay accountable.</strong> A shadow answers to no one but itself.</p></div>
+  <div class="not-item"><span class="not-x">✗</span><p class="not-text">You have <strong>never kept a promise to yourself.</strong> Start there first.</p></div>
+  <div class="not-item"><span class="not-x">✗</span><p class="not-text">You think you <strong>might break even one law.</strong> Do not enter. Come back when you are certain.</p></div>
+  <div class="not-item"><span class="not-x">✗</span><p class="not-text">You are here to <strong>try.</strong> The Covenant has no room for trying. Only doing.</p></div>
 </section>
 
 <!-- PRICE TRUTH -->
@@ -378,7 +356,7 @@
     </div>
     <div class="pay-card featured">
       <span class="pay-featured-badge">∴ Penalty of Honor</span>
-      <div class="pay-amount" style="font-size:1.8rem;padding-top:0.5rem">Breaking the<br>Covenant</div>
+      <div class="pay-amount" style="font-size:1.8rem;padding-top:0.5rem;font-family:'Cinzel',serif">Breaking the Covenant</div>
       <div class="pay-label" style="margin-top:0.75rem">Carries a Price</div>
       <div class="pay-desc">You will learn it when you enter. This is how the Covenant stays pure.</div>
     </div>
@@ -386,9 +364,9 @@
   <div class="ton-box">
     <p class="ton-logo">◈ TON Network ◈</p>
     <div class="ton-steps">
-      <div class="ton-step"><span class="ton-step-n">1.</span><span>Open <strong style="color:#3a3a4a">@wallet</strong> in Telegram or download Tonkeeper</span></div>
-      <div class="ton-step"><span class="ton-step-n">2.</span><span>Send exactly <strong style="color:#3a3a4a">$50 worth of TON</strong> to the address below</span></div>
-      <div class="ton-step"><span class="ton-step-n">3.</span><span>Copy your <strong style="color:#3a3a4a">transaction hash</strong> after sending</span></div>
+      <div class="ton-step"><span class="ton-step-n">1.</span><span>Open <strong style="color:#4a4a6a">@wallet</strong> in Telegram or download Tonkeeper</span></div>
+      <div class="ton-step"><span class="ton-step-n">2.</span><span>Send exactly <strong style="color:#4a4a6a">$50 worth of TON</strong> to the address below</span></div>
+      <div class="ton-step"><span class="ton-step-n">3.</span><span>Copy your <strong style="color:#4a4a6a">transaction hash</strong> after sending</span></div>
       <div class="ton-step"><span class="ton-step-n">4.</span><span>Enter your email + transaction hash below to seal your entry</span></div>
     </div>
     <div class="ton-address-wrap">
@@ -422,24 +400,15 @@
 <section class="penalty">
   <p class="section-rune">∴ The Penalty of Honor</p>
   <div class="penalty-box">
-    <div class="penalty-amount" style="font-size:2rem;line-height:1.3">The Price<br>of Honor</div>
-    <div class="penalty-label" style="margin-top:0.75rem">Revealed Upon Entry</div>
+    <div class="penalty-title">The Price<br>of Honor</div>
+    <div class="penalty-label">Revealed Upon Entry</div>
     <p class="penalty-text">
       Every shadow knows when a law has been broken. You may choose silence.<br><br>
       But silence has a price — <strong>you will never reach the depth of your power.</strong><br><br>
       Declare your breach. Pay the penalty. Rise again.<br><br>
       <strong>The penalty is not punishment. It is the price of your honor.</strong><br><br>
-      <em style="color:#3a2a4a">"The shadow that lies to itself dies in the dark."</em>
+      <em style="color:#3a2a4a;font-size:1.2rem">"The shadow that lies to itself dies in the dark."</em>
     </p>
-  </div>
-</section>
-
-<!-- ARMY -->
-<section class="army-section">
-  <p class="section-rune">∴ The Brotherhood</p>
-  <div class="army">
-    <span class="army-num" id="cnt">0</span>
-    <span class="army-label">Brothers<br>of the<br>Covenant</span>
   </div>
 </section>
 
@@ -476,11 +445,6 @@
   resize(); init(); draw();
   window.addEventListener('resize',()=>{ resize(); init(); });
 
-  // counter
-  const target=47, el=document.getElementById('cnt');
-  let n=0;
-  const t=setInterval(()=>{ n=Math.min(n+1,target); el.textContent=n; if(n>=target) clearInterval(t); },40);
-
   // copy
   function copyAddress() {
     navigator.clipboard.writeText(document.getElementById('ton-addr').textContent).then(()=>{
@@ -498,7 +462,6 @@
     if(!tx||tx.length<8){ document.getElementById('txhash-in').style.borderColor='#6b21a8'; return; }
     document.querySelectorAll('.confirm-box .input-row').forEach(r=>r.style.display='none');
     document.getElementById('ok').classList.add('show');
-    el.textContent=parseInt(el.textContent)+1;
   }
 </script>
 </body>
