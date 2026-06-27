@@ -37,18 +37,11 @@
         radial-gradient(ellipse at 70% 50%, rgba(76,29,149,0.12) 0%, transparent 60%);
       z-index: 1;
     }
-    .face { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; z-index: 0; }
-    .face-l {
-      background:
-        linear-gradient(to right, rgba(1,1,1,0.05) 0%, rgba(1,1,1,0.82) 100%),
-        url('https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=900&q=80&fit=crop&crop=faces') center/cover no-repeat;
-      filter: grayscale(1) contrast(1.4) brightness(0.5);
-    }
-    .face-r {
-      background:
-        linear-gradient(to left, rgba(1,1,1,0.05) 0%, rgba(1,1,1,0.82) 100%),
-        url('https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?w=900&q=80&fit=crop&crop=faces') center/cover no-repeat;
-      filter: grayscale(1) contrast(2) brightness(0.3) invert(1);
+    .face { position: absolute; inset: 0; z-index: 0; }
+    .face-bg {
+      position: absolute; inset: 0;
+      background: url('New-Shadow-Wallpaper-HD.jph') center/cover no-repeat;
+      filter: brightness(0.3) contrast(1.2);
     }
     .seam {
       position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -268,8 +261,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="face"><div class="face-l"></div><div class="face-r"></div></div>
-  <div class="seam"></div>
+  <div class="face"><div class="face-bg"></div></div>
   <div class="bg-layer"></div>
   <div class="vignette"></div>
   <div class="grain"></div>
