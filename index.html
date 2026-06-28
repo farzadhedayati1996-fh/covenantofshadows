@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COVENANT OF SHADOWS</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -23,8 +24,6 @@
       font-family: 'Cormorant Garamond', serif;
     }
     canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
-    /* ── HERO ── */
     .hero {
       position: relative; width: 100%; height: 100vh;
       display: flex; align-items: center; justify-content: center;
@@ -38,8 +37,7 @@
     }
     .bg-layer {
       position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 50%, rgba(107,33,168,0.15) 0%, transparent 60%),
+      background: radial-gradient(ellipse at 30% 50%, rgba(107,33,168,0.15) 0%, transparent 60%),
         radial-gradient(ellipse at 70% 50%, rgba(76,29,149,0.1) 0%, transparent 60%);
       z-index: 1;
     }
@@ -57,144 +55,53 @@
       text-align: center; padding: 2rem;
       display: flex; flex-direction: column; align-items: center;
     }
-    .eyebrow {
-      font-family: 'Cinzel', serif; font-size: 0.75rem;
-      letter-spacing: 0.6em; text-transform: uppercase;
-      color: var(--purple2); margin-bottom: 2rem;
-      opacity: 0; animation: fadeup 1.2s ease forwards 0.3s;
-    }
-    .logo-wrap {
-      display: flex; flex-direction: column; align-items: center;
-      opacity: 0; animation: fadeup 1.2s ease forwards 0.6s;
-    }
-    .logo-of {
-      font-family: 'Cinzel', serif; font-size: clamp(0.8rem, 2vw, 1.1rem);
-      letter-spacing: 0.8em; color: rgba(221,216,208,0.2); margin-bottom: 0.3rem;
-    }
-    .logo {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(3rem, 10vw, 8rem);
-      font-weight: 900; line-height: 1; letter-spacing: 0.12em;
-      color: var(--white);
-      text-shadow: 0 0 80px rgba(147,51,234,0.15), 3px 3px 0 rgba(107,33,168,0.4);
-    }
-    .logo-shadows {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1.3rem, 4vw, 3rem);
-      font-weight: 400; letter-spacing: 0.5em;
-      color: rgba(221,216,208,0.15); margin-top: 0.5rem;
-    }
-    .divider {
-      width: 120px; height: 1px;
-      background: linear-gradient(to right, transparent, var(--purple), transparent);
-      margin: 2rem auto;
-      opacity: 0; animation: fadeup 1.2s ease forwards 0.9s;
-    }
-    .tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 400;
-      color: rgba(221,216,208,0.45); letter-spacing: 0.08em;
-      line-height: 1.9; max-width: 480px;
-      opacity: 0; animation: fadeup 1.2s ease forwards 1.1s;
-    }
+    .eyebrow { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.6em; text-transform: uppercase; color: var(--purple2); margin-bottom: 2rem; opacity: 0; animation: fadeup 1.2s ease forwards 0.3s; }
+    .logo-wrap { display: flex; flex-direction: column; align-items: center; opacity: 0; animation: fadeup 1.2s ease forwards 0.6s; }
+    .logo-of { font-family: 'Cinzel', serif; font-size: clamp(0.8rem, 2vw, 1.1rem); letter-spacing: 0.8em; color: rgba(221,216,208,0.2); margin-bottom: 0.3rem; }
+    .logo { font-family: 'Cinzel', serif; font-size: clamp(3rem, 10vw, 8rem); font-weight: 900; line-height: 1; letter-spacing: 0.12em; color: var(--white); text-shadow: 0 0 80px rgba(147,51,234,0.15), 3px 3px 0 rgba(107,33,168,0.4); }
+    .logo-shadows { font-family: 'Cinzel', serif; font-size: clamp(1.3rem, 4vw, 3rem); font-weight: 400; letter-spacing: 0.5em; color: rgba(221,216,208,0.15); margin-top: 0.5rem; }
+    .divider { width: 120px; height: 1px; background: linear-gradient(to right, transparent, var(--purple), transparent); margin: 2rem auto; opacity: 0; animation: fadeup 1.2s ease forwards 0.9s; }
+    .tagline { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 400; color: rgba(221,216,208,0.45); letter-spacing: 0.08em; line-height: 1.9; max-width: 480px; opacity: 0; animation: fadeup 1.2s ease forwards 1.1s; }
     .tagline strong { color: var(--white); font-weight: 700; }
     .tagline .accent { color: var(--purple2); }
-    .hero-sub {
-      font-family: 'Cinzel', serif;
-      font-size: 0.8rem; letter-spacing: 0.35em;
-      color: rgba(221,216,208,0.15); margin-top: 1rem;
-      opacity: 0; animation: fadeup 1.2s ease forwards 1.2s;
-    }
-    .cta-wrap {
-      margin-top: 3rem;
-      display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
-      opacity: 0; animation: fadeup 1.2s ease forwards 1.4s;
-    }
-    .btn {
-      background: transparent; color: var(--purple2);
-      border: 1px solid var(--purple);
-      padding: 1.3rem 4rem;
-      font-family: 'Cinzel', serif; font-size: 1rem;
-      letter-spacing: 0.35em; cursor: pointer;
-      text-decoration: none; display: inline-block;
-      transition: all .4s; position: relative; overflow: hidden;
-    }
-    .btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, var(--violet), var(--purple));
-      transform: translateY(100%); transition: transform .35s; z-index: -1;
-    }
+    .hero-sub { font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.35em; color: rgba(221,216,208,0.15); margin-top: 1rem; opacity: 0; animation: fadeup 1.2s ease forwards 1.2s; }
+    .cta-wrap { margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.8rem; opacity: 0; animation: fadeup 1.2s ease forwards 1.4s; }
+    .btn { background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 1.3rem 4rem; font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: 0.35em; cursor: pointer; text-decoration: none; display: inline-block; transition: all .4s; position: relative; overflow: hidden; }
+    .btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--violet), var(--purple)); transform: translateY(100%); transition: transform .35s; z-index: -1; }
     .btn:hover { color: var(--white); border-color: var(--purple2); }
     .btn:hover::before { transform: translateY(0); }
-    .btn-note {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85rem; color: #1a1a2a; letter-spacing: 0.15em;
-    }
+    .btn-note { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; color: #1a1a2a; letter-spacing: 0.15em; }
     @keyframes fadeup { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-    .bob {
-      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5;
-      font-size: 0.65rem; letter-spacing: 0.3em; color: #1a1a2a;
-      font-family: 'Cinzel', serif;
-      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      animation: bobbing 2.5s ease-in-out infinite;
-    }
+    .bob { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5; font-size: 0.65rem; letter-spacing: 0.3em; color: #1a1a2a; font-family: 'Cinzel', serif; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; animation: bobbing 2.5s ease-in-out infinite; }
     .bob::after { content: ''; width: 1px; height: 36px; background: linear-gradient(to bottom, #1a1a2a, transparent); }
     @keyframes bobbing { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
-
     section { position: relative; z-index: 1; }
-
-    /* ── NOT FOR ── */
     .not-for { padding: 6rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
-    .section-rune {
-      font-family: 'Cinzel', serif; font-size: 0.75rem;
-      letter-spacing: 0.55em; color: var(--purple); text-transform: uppercase;
-      margin-bottom: 3.5rem; font-weight: 700;
-    }
+    .section-rune { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.55em; color: var(--purple); text-transform: uppercase; margin-bottom: 3.5rem; font-weight: 700; }
     .not-item { padding: 1.5rem 0; border-top: 1px solid #0a0a14; display: flex; gap: 1rem; align-items: flex-start; }
     .not-x { color: #2a1a2a; font-family: 'Cinzel', serif; font-size: 1.2rem; }
     .not-text { font-size: 1.15rem; color: #5a5a7a; line-height: 1.7; font-family: 'Cormorant Garamond', serif; }
     .not-text strong { color: #8a7a9a; }
-
-    /* ── PRICE TRUTH ── */
     .price-truth { padding: 5rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .truth-box { border-left: 2px solid var(--purple); padding: 2rem 2rem 2rem 2.5rem; background: #050508; }
-    .truth-box p {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 3vw, 1.7rem);
-      font-weight: 400; line-height: 2;
-      color: rgba(221,216,208,0.35); letter-spacing: 0.03em;
-    }
+    .truth-box p { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 400; line-height: 2; color: rgba(221,216,208,0.35); letter-spacing: 0.03em; }
     .truth-box p strong { color: var(--white); }
     .truth-box p .accent { color: var(--purple2); }
-
-    /* ── WARNING ── */
     .warning { padding: 4rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .warning-box { border: 1px solid #2a1a3a; background: #060409; padding: 2.5rem; position: relative; }
-    .warning-box::before {
-      content: '⚠ Read Before You Enter';
-      position: absolute; top: -0.55rem; left: 1.5rem;
-      background: var(--black); padding: 0 0.6rem;
-      font-family: 'Cinzel', serif; font-size: 0.65rem;
-      letter-spacing: 0.3em; color: var(--purple2); font-weight: 700;
-    }
+    .warning-box::before { content: '⚠ Read Before You Enter'; position: absolute; top: -0.55rem; left: 1.5rem; background: var(--black); padding: 0 0.6rem; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; color: var(--purple2); font-weight: 700; }
     .warning-text { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; line-height: 2; color: #5a5a6a; }
     .warning-text strong { color: var(--white); }
     .warning-text .red { color: var(--purple2); }
-
-    /* ── MANIFESTO ── */
     .manifesto { padding: 6rem 2rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .m-line { font-family: 'Cinzel', serif; font-size: clamp(1.6rem, 4.5vw, 2.8rem); font-weight: 700; line-height: 1.25; margin-bottom: 0.35rem; color: var(--white); }
     .m-soft { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 300; color: #1e1e2e; margin-bottom: 2.8rem; }
     .m-accent { color: var(--purple2); }
-
-    /* ── LAWS ── */
     .laws { padding: 4rem 2rem 7rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .law { display: grid; grid-template-columns: 3rem 1fr; gap: 1.5rem; padding: 2rem 0; border-top: 1px solid #0a0a14; }
     .law-n { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #12122a; line-height: 1; }
     .law-t { font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--white); }
     .law-d { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #4a4a5a; line-height: 1.75; }
-
-    /* ── PAYMENT ── */
     .payment { padding: 5rem 2rem 7rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #0a0a14; border: 1px solid #0a0a14; margin-bottom: 2.5rem; }
     .pay-card { background: #050508; padding: 2rem; text-align: center; }
@@ -222,7 +129,7 @@
     .confirm-box { margin-top: 2rem; border: 1px solid #0e0e1e; background: #050508; padding: 2rem; }
     .confirm-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.35em; color: var(--purple); margin-bottom: 1.25rem; text-transform: uppercase; }
     .input-row { display: flex; max-width: 100%; margin-bottom: 1rem; }
-    .input-row input { flex: 1; background: #030305; border: 1px solid #0e0e1e; border-right: none; color: var(--white); padding: 1rem 1rem; font-size: 1rem; font-family: 'Cormorant Garamond', serif; outline: none; transition: border-color .2s; }
+    .input-row input { flex: 1; background: #030305; border: 1px solid #0e0e1e; border-right: none; color: var(--white); padding: 1rem; font-size: 1rem; font-family: 'Cormorant Garamond', serif; outline: none; transition: border-color .2s; }
     .input-row input::placeholder { color: #0e0e1e; }
     .input-row input:focus { border-color: var(--purple); }
     .input-row button { background: transparent; color: var(--purple2); border: 1px solid var(--purple); padding: 1rem 1.2rem; font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; transition: all .25s; }
@@ -230,31 +137,23 @@
     .success-msg { display: none; padding: 1.5rem; border-left: 1px solid var(--purple); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--white); line-height: 1.9; }
     .success-msg.show { display: block; }
     .success-msg small { color: #1e1e2e; font-size: 0.9rem; display: block; margin-top: 0.5rem; }
-
-    /* ── PENALTY ── */
+    .error-msg { display: none; padding: 1rem; border-left: 1px solid #c0001a; font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #c0001a; margin-top: 0.5rem; }
+    .error-msg.show { display: block; }
     .penalty { padding: 4rem 2rem 6rem; max-width: 720px; margin: 0 auto; border-top: 1px solid #0a0a14; }
     .penalty-box { background: #050305; border: 1px solid #1a0a1a; padding: 2rem; }
     .penalty-title { font-family: 'Cinzel', serif; font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 900; color: var(--purple2); line-height: 1.2; margin-bottom: 0.5rem; }
     .penalty-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; color: #2a1a2a; margin-bottom: 1.5rem; }
     .penalty-text { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #3a2a3a; line-height: 1.9; }
     .penalty-text strong { color: #5a3a5a; }
-
-    /* ── FOOTER ── */
     footer { border-top: 1px solid #0a0a14; padding: 2.5rem 2rem; max-width: 720px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
     footer span { font-family: 'Cinzel', serif; font-size: 0.7rem; color: #0e0e1e; letter-spacing: 0.22em; text-transform: uppercase; }
-
-    @media(max-width:600px){
-      .pay-grid{grid-template-columns:1fr}
-      .input-row{flex-direction:column}
-      .input-row input{border-right:1px solid #0e0e1e;border-bottom:none}
-    }
+    @media(max-width:600px){ .pay-grid{grid-template-columns:1fr} .input-row{flex-direction:column} .input-row input{border-right:1px solid #0e0e1e;border-bottom:none} }
   </style>
 </head>
 <body>
 
 <canvas id="c"></canvas>
 
-<!-- HERO -->
 <section class="hero">
   <div class="face"><div class="face-bg"></div></div>
   <div class="bg-layer"></div>
@@ -268,10 +167,7 @@
       <p class="logo-shadows">OF SHADOWS</p>
     </div>
     <div class="divider"></div>
-    <p class="tagline">
-      You didn't choose the shadow.<br>
-      <strong><span class="accent">The shadow chose you.</span></strong>
-    </p>
+    <p class="tagline">You didn't choose the shadow.<br><strong><span class="accent">The shadow chose you.</span></strong></p>
     <p class="hero-sub">The few. The silent. The chosen.</p>
     <div class="cta-wrap">
       <a href="#enter" class="btn">I Have Been Chosen</a>
@@ -281,7 +177,6 @@
   <div class="bob">descend</div>
 </section>
 
-<!-- NOT FOR -->
 <section class="not-for">
   <p class="section-rune">∴ This Is Not For You If</p>
   <div class="not-item"><span class="not-x">✗</span><p class="not-text">You are looking for <strong>motivation.</strong> We don't motivate. We demand.</p></div>
@@ -291,22 +186,12 @@
   <div class="not-item"><span class="not-x">✗</span><p class="not-text">You are here to <strong>try.</strong> The Covenant has no room for trying. Only doing.</p></div>
 </section>
 
-<!-- PRICE TRUTH -->
 <section class="price-truth">
   <div class="truth-box">
-    <p>
-      Life itself has taught you this —<br>
-      <strong>everything has a price.</strong><br>
-      Nothing of value is ever free.<br><br>
-      Even God whispers it in every breath you take —<br>
-      <span class="accent">existence costs something.</span><br><br>
-      The question is not whether you will pay.<br>
-      <strong>The question is what you are willing to pay for.</strong>
-    </p>
+    <p>Life itself has taught you this —<br><strong>everything has a price.</strong><br>Nothing of value is ever free.<br><br>Even God whispers it in every breath you take —<br><span class="accent">existence costs something.</span><br><br>The question is not whether you will pay.<br><strong>The question is what you are willing to pay for.</strong></p>
   </div>
 </section>
 
-<!-- WARNING -->
 <section class="warning">
   <p class="section-rune">∴ Before You Enter</p>
   <div class="warning-box">
@@ -321,7 +206,6 @@
   </div>
 </section>
 
-<!-- MANIFESTO -->
 <section class="manifesto">
   <p class="section-rune">∴ The Truth</p>
   <p class="m-line">Most men live loud.</p>
@@ -332,7 +216,6 @@
   <p class="m-soft">This is a <span class="m-accent">brotherhood of the chosen.</span></p>
 </section>
 
-<!-- LAWS -->
 <section class="laws">
   <p class="section-rune">∴ The Eight Sacred Laws</p>
   <div class="law"><span class="law-n">I</span><div><p class="law-t">Guard Your Sacred Energy</p><p class="law-d">No pornography. No self-destruction. Your energy is the source of everything you will ever build.</p></div></div>
@@ -345,7 +228,6 @@
   <div class="law"><span class="law-n">VIII</span><div><p class="law-t">Feed the Temple with Precision</p><p class="law-d">What enters your body enters your mind. Choose every meal as if your future depends on it. It does.</p></div></div>
 </section>
 
-<!-- PAYMENT -->
 <section class="payment" id="enter">
   <p class="section-rune">∴ Enter the Covenant</p>
   <div class="pay-grid">
@@ -374,10 +256,7 @@
       <p class="ton-address" id="ton-addr">UQChfOygZlWIPmgLiFRlQuA7G-rKRCJdUyq5gjf8XhZC0kgH</p>
       <button class="copy-btn" id="copy-btn" onclick="copyAddress()">Copy Address</button>
     </div>
-    <p class="ton-note">
-      <strong>Network:</strong> TON (The Open Network) · <strong>Amount:</strong> $50 USD in TON<br>
-      Do not send from an exchange. Use a personal wallet only.
-    </p>
+    <p class="ton-note"><strong>Network:</strong> TON · <strong>Amount:</strong> $50 USD in TON<br>Do not send from an exchange. Use a personal wallet only.</p>
   </div>
   <div class="confirm-box">
     <p class="confirm-title">∴ Seal Your Covenant</p>
@@ -389,14 +268,13 @@
       <button onclick="sealCovenant()">Seal</button>
     </div>
     <div class="success-msg" id="ok">
-      The Covenant is sealed.<br>
-      First transmission arrives tomorrow at 05:00 AM.
+      The Covenant is sealed.<br>First transmission arrives tomorrow at 05:00 AM.
       <small>Welcome, brother. There is no way back.</small>
     </div>
+    <div class="error-msg" id="err">Something went wrong. Try again.</div>
   </div>
 </section>
 
-<!-- PENALTY -->
 <section class="penalty">
   <p class="section-rune">∴ The Penalty of Honor</p>
   <div class="penalty-box">
@@ -418,30 +296,19 @@
 </footer>
 
 <script>
+  // ── SUPABASE CONFIG ──
+  // داداش اینجا key خودت رو جایگزین کن
+  const SUPABASE_URL = 'https://ineerwfiaedcklyumvbm.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_PWBwH6zxv1HybjmMb0TwxQ_gkJu3Id8';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
   // particles
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
   let W, H, pts = [];
   function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  function init() {
-    pts = Array.from({length:55}, ()=>({
-      x:Math.random()*W, y:Math.random()*H,
-      r:Math.random()*1.2+0.2,
-      dx:(Math.random()-.5)*.25, dy:(Math.random()-.5)*.25,
-      o:Math.random()*.4+.05
-    }));
-  }
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.x<0||p.x>W) p.dx*=-1;
-      if(p.y<0||p.y>H) p.dy*=-1;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(147,51,234,${p.o})`; ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  }
+  function init() { pts = Array.from({length:55}, ()=>({ x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.2+0.2, dx:(Math.random()-.5)*.25, dy:(Math.random()-.5)*.25, o:Math.random()*.4+.05 })); }
+  function draw() { ctx.clearRect(0,0,W,H); pts.forEach(p=>{ p.x+=p.dx; p.y+=p.dy; if(p.x<0||p.x>W) p.dx*=-1; if(p.y<0||p.y>H) p.dy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`rgba(147,51,234,${p.o})`; ctx.fill(); }); requestAnimationFrame(draw); }
   resize(); init(); draw();
   window.addEventListener('resize',()=>{ resize(); init(); });
 
@@ -454,14 +321,25 @@
     });
   }
 
-  // seal
-  function sealCovenant() {
-    const email=document.getElementById('email-in').value.trim();
-    const tx=document.getElementById('txhash-in').value.trim();
-    if(!email||!email.includes('@')){ document.getElementById('email-in').style.borderColor='#6b21a8'; return; }
-    if(!tx||tx.length<8){ document.getElementById('txhash-in').style.borderColor='#6b21a8'; return; }
-    document.querySelectorAll('.confirm-box .input-row').forEach(r=>r.style.display='none');
-    document.getElementById('ok').classList.add('show');
+  // seal — ذخیره تو Supabase
+  async function sealCovenant() {
+    const email = document.getElementById('email-in').value.trim();
+    const tx = document.getElementById('txhash-in').value.trim();
+    const okEl = document.getElementById('ok');
+    const errEl = document.getElementById('err');
+
+    if(!email || !email.includes('@')) { document.getElementById('email-in').style.borderColor='#6b21a8'; return; }
+    if(!tx || tx.length < 8) { document.getElementById('txhash-in').style.borderColor='#6b21a8'; return; }
+
+    const { error } = await sb.from('brothers').insert([{ email, tx_hash: tx }]);
+
+    if(error) {
+      errEl.textContent = error.code === '23505' ? 'This email is already in the Covenant.' : 'Something went wrong. Try again.';
+      errEl.classList.add('show');
+    } else {
+      document.querySelectorAll('.confirm-box .input-row').forEach(r=>r.style.display='none');
+      okEl.classList.add('show');
+    }
   }
 </script>
 </body>
